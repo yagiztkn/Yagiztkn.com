@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Yago.Business/Yago.Business.csproj" />
+  <Project Path="Yago.Core/Yago.Core.csproj" />
+  <Project Path="Yago.DataAcsess/Yago.DataAcsess.csproj" />
+  <Project Path="Yago.WebUI/Yago.WebUI.csproj" Id="0d264b8d-9cec-4561-b73e-c67385ce986f" />
+</Solution>

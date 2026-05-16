@@ -1,0 +1,6 @@
+@Yago.WebUI_HostAddress = http://localhost:5182
+
+GET {{Yago.WebUI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
