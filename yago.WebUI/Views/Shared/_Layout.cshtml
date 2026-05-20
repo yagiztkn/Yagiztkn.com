@@ -184,19 +184,17 @@
     <!-- ═══ NAV ═══ -->
     <header class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
             :class="sc?'bg-white/90 dark:bg-zinc-950/90 backdrop-blur-md shadow-sm shadow-black/5':''">
-        <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between" aria-label="Main navigation">
+        <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between" aria-label="Ana navigasyon">
 
-            <a href="/Project/Index" class="text-xl font-bold tracking-wider text-zinc-900 dark:text-white">
+            <a href="/Project/Index" class="text-xl font-bold tracking-wider text-zinc-900 dark:te xt-white">
                 yagiztkn<span class="text-orange-500">.</span>
             </a>
 
             <ul class="hidden md:flex items-center gap-8 text-sm" role="list">
-                <li><a href="#services" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='services'?'on !text-zinc-900 dark:!text-white':''">Services</a></li>
-                <li><a href="#work" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='work'?'on !text-zinc-900 dark:!text-white':''">Work</a></li>
-                <li><a href="#about" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='about'?'on !text-zinc-900 dark:!text-white':''">About</a></li>
-                <li><a href="#reviews" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='reviews'?'on !text-zinc-900 dark:!text-white':''">Reviews</a></li>
-                <li><a href="#blog" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='blog'?'on !text-zinc-900 dark:!text-white':''">Blog</a></li>
-                <li><a href="#contact" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='contact'?'on !text-zinc-900 dark:!text-white':''">Contact</a></li>
+                <li><a href="#services" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='services'?'on !text-zinc-900 dark:!text-white':''">Uzmanlıklarım</a></li>
+                <li><a href="#work" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='work'?'on !text-zinc-900 dark:!text-white':''">Projelerim</a></li>
+                <li><a href="#about" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='about'?'on !text-zinc-900 dark:!text-white':''">Hakkımda</a></li>                
+                <li><a href="#contact" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='contact'?'on !text-zinc-900 dark:!text-white':''">İletişim</a></li>
             </ul>
 
             <div class="flex items-center gap-3">
@@ -207,7 +205,7 @@
                 </button>
                 <!-- hire me -->
                 <a href="#contact" class="hidden md:inline-flex items-center gap-2 shimmer bg-accent text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-accent-light transition-colors">
-                    Hire me
+                    Bana Ulaşın
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </a>
                 <!-- hamburger -->
@@ -224,14 +222,12 @@
              x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2"
              class="md:hidden bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-900">
             <ul class="flex flex-col px-6 py-5 gap-4 text-sm font-medium" role="list">
-                <li><a href="#services" @@click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Services</a></li>
-                <li><a href="#work" @@click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Work</a></li>
-                <li><a href="#about" @@click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">About</a></li>
-                <li><a href="#reviews" @@click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Reviews</a></li>
-                <li><a href="#blog" @@click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Blog</a></li>
-                <li><a href="#contact" @@click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Contact</a></li>
+                <li><a href="#services" @@click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Uzmanlıklar</a></li>
+                <li><a href="#projects" @@click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Projeler</a></li>
+                <li><a href="#about" @@click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Hakkımda</a></li>
+                <li><a href="#contact" @@click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">İletişim</a></li>
                 <li class="pt-2 border-t border-zinc-100 dark:border-zinc-900">
-                    <a href="#contact" @@click="mm=false" class="inline-flex shimmer bg-accent text-white font-medium text-sm px-5 py-2.5 rounded-full">Hire me →</a>
+                    <a href="#contact" @@click="mm=false" class="inline-flex shimmer bg-accent text-white font-medium text-sm px-5 py-2.5 rounded-full">Bana Ulaşın →</a>
                 </li>
             </ul>
         </div>
@@ -242,17 +238,29 @@
       @RenderBody()
 
 
-    <footer class="border-t border-zinc-100 dark:border-zinc-900">
-        <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p class="text-sm text-zinc-400">© <span id="yr"></span> Eliott. All rights reserved. <br> Developed by <a href="https://lbegey78.gumroad.com/" target="_blank" class="font-bold">Laurent Begey</a> • Distributed by <a href="https://themewagon.com/" target="_blank" class="font-bold">ThemeWagon</a></p>
-            <p class="text-xs text-zinc-500">
-                Built with
-                <a href="https://tailwindcss.com" rel="noopener noreferrer" target="_blank" class="hover:text-accent transition-colors">Tailwind CSS</a>
-                &amp;
-                <a href="https://alpinejs.dev" rel="noopener noreferrer" target="_blank" class="hover:text-accent transition-colors">Alpine.js</a>
-            </p>
-        </div>
-    </footer>
+        <footer class="py-10 border-t border-zinc-100 dark:border-zinc-800 mt-20">
+            <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 font-medium">
+                    &copy; @DateTime.Now.Year Yağız Tekin. Tüm hakları saklıdır.
+                </p>
+
+                <div class="flex items-center gap-6">
+                    <a href="mailto:hello@yagiztkn.com" class="text-sm font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition">
+                        hello@yagiztkn.com
+                    </a>
+                    <a href="https://www.linkedin.com/in/yagiztekin-software/" target="_blank" class="text-zinc-500 hover:text-[#0A66C2] transition">
+                        <i class="fa-brands fa-linkedin text-xl"></i>
+                    </a>
+                    <a href="https://github.com/282yago" target="_blank" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition">
+                        <i class="fa-brands fa-github text-xl"></i>
+                    </a>
+                    <a href="https://www.instagram.com/yagiztkn_/?hl=tr" target="_blank" class="text-zinc-500 hover:text-white transition">
+                        <i class="fa-brands fa-instagram text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </footer>
 
     <script>
         function app() {
@@ -287,7 +295,7 @@
         updateSection() {
         const atBottom = (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 60;
         if (atBottom) { this.s = 'contact'; return; }
-        const ids = ['contact', 'blog', 'reviews', 'about', 'work', 'services', 'hero'];
+        const ids = ['contact', 'about', 'work', 'services', 'hero'];
         for (const id of ids) {
         const el = document.getElementById(id);
         if (el && window.scrollY >= el.offsetTop - 130) { this.s = id; return; }
