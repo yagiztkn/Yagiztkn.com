@@ -5,5 +5,5 @@
   <Project Path="Yago.Business/Yago.Business.csproj" />
   <Project Path="Yago.Core/Yago.Core.csproj" />
   <Project Path="Yago.DataAcsess/Yago.DataAcsess.csproj" />
-  <Project Path="Yago.WebUI/Yago.WebUI.csproj" DisplayName="yago.WebUI" Id="299de129-687b-48b9-829d-5cb21e21cbf9" />
+  <Project Path="Yago.WebUI/Yago.WebUI.csproj" Id="299de129-687b-48b9-829d-5cb21e21cbf9" />
 </Solution>

@@ -2,15 +2,14 @@
 <html lang="en" x-data="app()" :class="{'dark':dark}" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Eliott — Freelance UI/UX Designer and Frontend Developer. Fast, clean and accessible digital products.">
-    <meta name="keywords" content="freelance developer, UI designer, portfolio, Tailwind CSS, Alpine.js">
-    <meta name="author" content="Eliott">
-    <meta property="og:title" content="Eliott — Freelance UI/UX Designer">
-    <meta property="og:description" content="I design and build digital products that people love to use.">
+    <meta name="description" content="Yağız Tekin - Yazılım Mühendisliği öğrencisi ve Backend Geliştiricisi. C#, .NET ve N-Tier mimarisi ile güvenli, ölçeklenebilir sistemler ve otomasyonlar geliştiriyorum.">
+    <meta name="keywords" content="Yağız Tekin, Backend Developer, C#, .NET Core, Yazılım Mühendisi, Tekin Software, Otomasyon">
+    <meta name="author" content="Yağız Tekin">
+    <meta property="og:title" content="Yağız Tekin - Backend Geliştirici">
+    <meta property="og:description" content="C# ve .NET ekosisteminde sağlam, ölçeklenebilir ve güvenli altyapılar inşa ediyorum.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://eliott.dev">
-    <title>Eliott — Freelance UI/UX Designer &amp; Frontend Dev</title>
+    <meta property="og:url" content="https://yagiztkn.com">
+    <title>Yağız Tekin - Backend Developer</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -24,7 +23,7 @@
         theme: {
         extend: {
         fontFamily: { display: ['PT Sans', 'sans-serif'], body: ['DM Sans', 'sans-serif'] },
-        colors: { accent: '#FF6B2B', 'accent-light': '#FF8F5C' }
+        colors: { accent: '#3b82f6', 'accent-light': '#60a5fa' }
         }
         }
         }
@@ -186,16 +185,17 @@
             :class="sc?'bg-white/90 dark:bg-zinc-950/90 backdrop-blur-md shadow-sm shadow-black/5':''">
         <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between" aria-label="Ana navigasyon">
 
-            <a href="/Project/Index" class="text-xl font-bold tracking-wider text-zinc-900 dark:te xt-white">
-                yagiztkn<span class="text-orange-500">.</span>
+            <a href="/" class="text-xl font-bold tracking-wider text-zinc-900 dark:text-white">
+                yagiz<span class="text-accent">tkn.</span>
             </a>
 
             <ul class="hidden md:flex items-center gap-8 text-sm" role="list">
-                <li><a href="#services" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='services'?'on !text-zinc-900 dark:!text-white':''">Uzmanlıklarım</a></li>
-                <li><a href="#work" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='work'?'on !text-zinc-900 dark:!text-white':''">Projelerim</a></li>
-                <li><a href="#about" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='about'?'on !text-zinc-900 dark:!text-white':''">Hakkımda</a></li>                
-                <li><a href="#contact" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='contact'?'on !text-zinc-900 dark:!text-white':''">İletişim</a></li>
+                <li><a href="/#services" class="nl ...">Uzmanlıklarım</a></li>
+                <li><a href="/#work" class="nl ...">Projelerim</a></li>
+                <li><a href="/#about" class="nl ...">Hakkımda</a></li>
+                <li><a href="/#contact" class="nl ...">İletişim</a></li>
             </ul>
+
 
             <div class="flex items-center gap-3">
                 <!-- dark toggle -->
@@ -222,13 +222,10 @@
              x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2"
              class="md:hidden bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-900">
             <ul class="flex flex-col px-6 py-5 gap-4 text-sm font-medium" role="list">
-                <li><a href="#services" @@click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Uzmanlıklar</a></li>
-                <li><a href="#projects" @@click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Projeler</a></li>
-                <li><a href="#about" @@click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Hakkımda</a></li>
-                <li><a href="#contact" @@click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">İletişim</a></li>
-                <li class="pt-2 border-t border-zinc-100 dark:border-zinc-900">
-                    <a href="#contact" @@click="mm=false" class="inline-flex shimmer bg-accent text-white font-medium text-sm px-5 py-2.5 rounded-full">Bana Ulaşın →</a>
-                </li>
+                <li><a href="/#services" @@click="mm=false" class="...">Uzmanlıklar</a></li>
+                <li><a href="/#work" @@click="mm=false" class="...">Projeler</a></li> 
+                <li><a href="/#about" @@click="mm=false" class="...">Hakkımda</a></li>
+                <li><a href="/#contact" @@click="mm=false" class="...">İletişim</a></li>
             </ul>
         </div>
     </header>
@@ -288,8 +285,7 @@
         }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
         document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-        // year
-        document.getElementById('yr').textContent = new Date().getFullYear();
+
         },
 
         updateSection() {

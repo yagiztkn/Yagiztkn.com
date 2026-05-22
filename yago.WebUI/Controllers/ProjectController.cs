@@ -8,14 +8,30 @@ namespace Yago.WebUI.Controllers
     public class ProjectController : Controller
     {
         private readonly IGenericService<Project> _projectService;
+
         public ProjectController(IGenericService<Project> projectService)
         {
             _projectService = projectService;
         }
+
         public IActionResult Index()
         {
             var projects = _projectService.TGetList();
             return View(projects);
+        }
+
+        // YENİ EKLEDİĞİMİZ DETAY METODU
+        public IActionResult Details(int id)
+        {
+            // Servis üzerinden ID'ye göre projeyi getiriyoruz
+            var project = _projectService.TGetByID(id);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            return View(project);
         }
 
         [HttpGet]
@@ -27,17 +43,14 @@ namespace Yago.WebUI.Controllers
         [HttpPost]
         public IActionResult CreateProject(Project project)
         {
-           project.CreatedDate = DateTime.Now;
+            project.CreatedDate = DateTime.Now;
 
-            project.FullDescription = "Bu Projenin Detaylı Açıklamasıdır. Projenin Amacı, Kullanılan Teknolojiler ve Diğer Bilgiler Buraya Yazılabilir.";
-
-            project.LiveLink = "Yayında değil";
-
-            project.ShortDescription = "Kısa açıklama eklenecek.";
+            // Eğer formdan gelmiyorsa varsayılan değerleri burada atayabilirsin
+            if (string.IsNullOrEmpty(project.FullDescription))
+                project.FullDescription = "Bu Projenin Detaylı Açıklamasıdır...";
 
             _projectService.TInsert(project);
-
             return RedirectToAction("Index");
         }
-    }   
+    }
 }

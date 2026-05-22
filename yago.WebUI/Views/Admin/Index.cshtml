@@ -1,0 +1,131 @@
+﻿@model IEnumerable<Yago.Core.Entities.Project>
+@{
+    // Panelin ana siteden bağımsız olması için Layout'u iptal ediyoruz
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yönetim Paneli - yagiztkn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+        darkMode: 'class',
+        theme: {
+        extend: {
+        colors: {
+        accent: '#3b82f6', // Vitrindeki kurumsal mavi
+        }
+        }
+        }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body class="bg-zinc-950 text-zinc-300 font-sans selection:bg-accent selection:text-white flex min-h-screen">
+
+    <aside class="w-64 bg-zinc-900 border-r border-zinc-800 flex flex-col justify-between">
+        <div>
+            <div class="h-20 flex items-center px-8 border-b border-zinc-800">
+                <h2 class="text-xl font-bold text-white tracking-widest">yagiz<span class="text-accent">tkn.</span></h2>
+            </div>
+            <nav class="p-4 flex flex-col gap-2">
+                <a href="#" class="flex items-center gap-3 px-4 py-3 bg-accent/10 text-accent rounded-xl font-medium transition-colors">
+                    <i class="fa-solid fa-layer-group"></i>
+                    Projelerim
+                </a>
+                <a href="/" target="_blank" class="flex items-center gap-3 px-4 py-3 text-zinc-500 hover:text-white hover:bg-zinc-800/50 rounded-xl font-medium transition-colors">
+                    <i class="fa-solid fa-globe"></i>
+                    Siteyi Görüntüle
+                </a>
+            </nav>
+        </div>
+        <div class="p-4 border-t border-zinc-800">
+            <a href="/Admin/Login" class="flex items-center gap-3 px-4 py-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl font-medium transition-colors">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                Çıkış Yap
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-1 p-10 overflow-y-auto">
+
+        <div class="flex justify-between items-center mb-10">
+            <div>
+                <h1 class="text-3xl font-bold text-white mb-2">Hoş Geldin, Yağız</h1>
+                <p class="text-zinc-500 font-medium">Sistem durumu normal. Buradan projelerini yönetebilirsin.</p>
+            </div>
+            <a href="/Admin/Create" class="bg-accent hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+                <i class="fa-solid fa-plus"></i> Yeni Proje Ekle
+            </a>
+        </div>
+
+        <div class="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-2xl">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-zinc-950/50 border-b border-zinc-800 text-zinc-400 text-xs uppercase tracking-wider">
+                        <th class="p-5 font-semibold">Proje Bilgileri</th>
+                        <th class="p-5 font-semibold text-right">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-zinc-800">
+
+                    @foreach (var item in Model)
+                    {
+                        <tr class="hover:bg-zinc-800/40 transition-colors group">
+                            <td class="p-5">
+                                <div class="font-medium text-white text-base">@item.Title</div>
+                                <div class="text-sm text-zinc-500 mt-1">@item.ShortDescription</div>
+                            </td>
+                            <td class="p-5 text-right">
+                                <a href="/Admin/Update/@item.ID" class="text-zinc-500 hover:text-accent transition-colors p-2" title="Düzenle">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                                <button onclick="openDeleteModal(@item.ID)" class="text-zinc-500 hover:text-red-400 transition-colors p-2" title="Özel Silme Paneli">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+    <div id="deleteModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-all duration-300">
+        <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl transform transition-all">
+            <div class="text-center">
+                <div class="w-16 h-16 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center mx-auto mb-4 text-2xl">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+
+                <h3 class="text-xl font-bold text-white mb-2">Projeyi Sil</h3>
+                <p class="text-zinc-400 text-sm mb-6">Bu projeyi silmek istediğine emin misin? Bu işlem bir daha geri alınamaz.</p>
+
+                <div class="flex gap-3">
+                    <button onclick="closeDeleteModal()" class="flex-1 px-4 py-2.5 rounded-xl font-medium text-zinc-300 bg-zinc-800 hover:bg-zinc-700 transition-colors">İptal</button>
+                    <a id="confirmDeleteBtn" href="#" class="flex-1 px-4 py-2.5 rounded-xl font-medium text-white bg-red-500 hover:bg-red-600 shadow-[0_0_15px_rgba(239,68,68,0.3)] transition-all">Evet, Sil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function openDeleteModal(projectId) {
+        // 1. Modalı görünür yap
+        document.getElementById('deleteModal').classList.remove('hidden');
+
+        // 2. Kırmızı 'Evet, Sil' butonuna, silinecek olan projenin ID'sini fırlat
+        document.getElementById('confirmDeleteBtn').href = '/Admin/Delete/' + projectId;
+        }
+
+        function closeDeleteModal() {
+        // İptale basılırsa modalı tekrar gizle
+        document.getElementById('deleteModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
+

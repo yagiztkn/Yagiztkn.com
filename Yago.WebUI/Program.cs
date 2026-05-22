@@ -4,8 +4,17 @@ using Yago.Business.Abstract;
 using Yago.Business.Concrete;
 using Yago.DataAcsess.Abstract;
 using Yago.DataAcsess.Concrete;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+    {
+        options.LoginPath = "/Admin/Login";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+
+    });
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -29,6 +38,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

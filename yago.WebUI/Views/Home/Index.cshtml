@@ -1,1 +1,271 @@
-﻿
+﻿@model List<Yago.Core.Entities.Project>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- ═══ HERO ═══ -->
+<section id="hero" class="relative min-h-screen flex items-center pt-16 overflow-hidden">
+    <div class="absolute top-1/4 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute bottom-1/4 left-0 w-64 h-64 bg-zinc-200/50 dark:bg-zinc-800/30 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+
+    <div class="relative z-10 max-w-6xl mx-auto px-6 py-24 w-full">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+
+            <div>
+                <p class="reveal text-sm font-medium text-accent tracking-widest uppercase mb-4">ÇALIŞMAYA HAZIR</p>
+                <h1 class="reveal d1 font-display font-bold text-5xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tight text-zinc-900 dark:text-white mb-6">
+                    Merhaba, ben <span class="text-accent">Yağız Tekin</span>
+                </h1>
+                <p class="reveal d2 text-lg md:text-xl text-zinc-500 dark:text-zinc-400 font-light leading-relaxed max-w-md mb-10">
+                    Yazılım Mühendisliği öğrencisi ve Backend Geliştiriciyim. C# ve .NET ekosisteminde sağlam, ölçeklenebilir ve güvenli altyapılar inşa ediyor; freelance projelerle dijital fikirleri hayata geçiriyorum.
+                </p>
+                <div class="reveal d3 flex flex-wrap gap-4">
+                    <a href="#work" class="shimmer inline-flex items-center gap-2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-medium px-7 py-3.5 rounded-full hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors text-sm">
+                        Projelerimi İncele
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </a>
+                    <a href="#contact" class="inline-flex items-center gap-2 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 font-medium px-7 py-3.5 rounded-full hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors text-sm">İletişime Geç</a>
+                </div>
+                <div class="reveal d4 flex gap-8 mt-14 pt-8 border-t border-zinc-100 dark:border-zinc-900">
+                    <div><p class="font-display font-bold text-3xl text-zinc-900 dark:text-white">1+</p><p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Geliştirilen Proje</p></div>
+                </div>
+            </div>
+
+            <div class="reveal d2 flex justify-center md:justify-end">
+                <div class="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96">
+                    <div class="pf w-full h-full rounded-3xl">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80" alt="Eliott — Freelance UI/UX Designer" loading="eager">
+                    </div>
+                    <div class="absolute -bottom-4 -left-4 bg-accent text-white font-display font-bold text-sm px-4 py-2.5 rounded-2xl shadow-lg">Yeni Projelere Açık</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ═══ SERVICES ═══ -->
+<section id="services" class="py-24 bg-zinc-50 dark:bg-zinc-900/40">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="mb-14">
+            <p class="reveal text-xs font-medium text-accent tracking-widest uppercase mb-3">Ne Yaparım</p>
+            <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">Hizmetler</h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+
+            <article class="reveal d1 card-h group bg-white dark:bg-zinc-900 rounded-2xl p-8 border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+                <div class="w-12 h-12 flex items-center justify-center bg-orange-50 dark:bg-zinc-800 rounded-xl mb-6 group-hover:bg-accent/10 transition-colors">
+                    <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2h-2" /></svg>
+                </div>
+                <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white mb-3">Backend Geliştirme</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">C# ve .NET ekosistemini kullanarak yüksek performanslı, güvenli ve ölçeklenebilir arka uç (backend) sistemleri ile API'ler geliştiriyorum.</p>
+            </article>
+
+            <article class="reveal d2 card-h group bg-zinc-900 dark:bg-zinc-800 rounded-2xl p-8 border border-zinc-800 hover:border-accent">
+                <div class="w-12 h-12 flex items-center justify-center bg-zinc-800 dark:bg-zinc-700 rounded-xl mb-6 group-hover:bg-accent/20 transition-colors">
+                    <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                </div>
+                <h3 class="font-display font-bold text-xl text-white mb-3">Kurumsal Yazılım Mimarisi</h3>
+                <p class="text-sm text-zinc-400 leading-relaxed">Projelerimi N-Tier (Çok Katmanlı) mimari, Nesne Yönelimli Programlama (OOP) ve Entity Framework ile kurguluyor; veri yönetimini SQL veritabanları üzerinde optimize ediyorum.</p>
+            </article>
+
+            <article class="reveal d3 card-h group bg-white dark:bg-zinc-900 rounded-2xl p-8 border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+                <div class="w-12 h-12 flex items-center justify-center bg-orange-50 dark:bg-zinc-800 rounded-xl mb-6 group-hover:bg-accent/10 transition-colors">
+                    <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" /></svg>
+                </div>
+                <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white mb-3">Sistem & Süreç Otomasyonu</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Tekrarlanan manuel işleri ortadan kaldıran akıllı arka plan servisleri, otomatik iş akışları ve sistemler arası entegrasyon çözümleri geliştiriyorum.</p>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<!-- ═══ WORK ═══ -->
+<section id="work" class="py-24">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-14">
+            <div>
+                <p class="reveal text-xs font-medium text-accent tracking-widest uppercase mb-3">Projelerim</p>
+                <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">Öne Çıkan Projeler</h2>
+            </div>
+            <a asp-controller="Project" asp-action="Index" class="text-sm font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors flex items-center gap-2">
+                Tüm Projeler →
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 gap-12">
+            @foreach (var item in Model)
+            {
+                <div class="group relative bg-white dark:bg-zinc-900/50 rounded-[2rem] p-10 border border-zinc-100 dark:border-zinc-800 hover:border-accent/30 transition-all duration-500 reveal">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-8">
+
+                        <div class="flex-1">
+                            <!-- Üst Bilgi -->
+                            <div class="flex items-center gap-4 mb-6">
+                                <span class="text-[10px] font-black tracking-[0.2em] text-accent uppercase bg-accent/10 px-3 py-1 rounded-full">PROJE</span>
+                                <span class="text-xs font-medium text-zinc-400">@item.CreatedDate.Year</span>
+                            </div>
+
+                            <!-- Başlık -->
+                            <h4 class="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-white mb-4 group-hover:text-accent transition-colors tracking-tighter">
+                                @item.Title
+                            </h4>
+
+                            <!-- Kısa Açıklama -->
+                            <p class="text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl mb-8">
+                                @item.ShortDescription
+                            </p>
+
+                            <!-- Teknolojiler -->
+                            <div class="flex flex-wrap gap-2 mb-8">
+                                @if (!string.IsNullOrEmpty(item.Technologies))
+                                {
+                                    foreach (var tech in item.Technologies.Split(','))
+                                    {
+                                        <span class="text-[10px] font-bold px-3 py-1.5 border border-zinc-200 dark:border-zinc-800 text-zinc-500 rounded-lg uppercase tracking-widest">
+                                            @tech.Trim()
+                                        </span>
+                                    }
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Buton -->
+                        <div class="shrink-0">
+                            <a asp-controller="Project" asp-action="Details" asp-route-id="@item.ID" class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:bg-accent dark:hover:bg-accent hover:text-white transition-all duration-300 group-hover:scale-110 shadow-xl">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- ═══ ABOUT ═══ -->
+<section id="about" class="py-24 bg-zinc-50 dark:bg-zinc-900/40">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="grid md:grid-cols-2 gap-16 items-center">
+
+            <div class="reveal order-2 md:order-1">
+                <div class="pf w-full aspect-square max-w-sm mx-auto rounded-3xl">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=700&q=80" alt="Eliott" loading="lazy">
+                </div>
+            </div>
+
+            <div class="order-1 md:order-2">
+                <p class="reveal text-xs font-medium text-accent tracking-widest uppercase mb-3">Hakkımda</p>
+                <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white leading-tight mb-6">Kendim hakkında<br>biraz bilgi</h2>
+                <p class="reveal d2 text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">
+                    Bandırma Onyedi Eylül Üniversitesi'nde Yazılım Mühendisliği öğrencisi ve tutkulu bir backend geliştiricisiyim. İşin sadece kod yazmak değil, mimariyi doğru kurgulamak; sağlam, güvenli ve ölçeklenebilir altyapılar (N-Tier, OOP) inşa etmek olduğuna inanıyorum.
+                </p>
+                <p class="reveal d3 text-zinc-500 dark:text-zinc-400 leading-relaxed mb-8">
+                    İnsan müdahalesini en aza indiren akıllı arka plan servisleri, veri akışları ve sistem otomasyonları geliştirmekten büyük keyif alıyorum. Geliştirdiğim her projede temiz koda ve sürdürülebilir kurumsal yaklaşımlara odaklanarak karmaşık problemleri çözüyorum.
+                </p>
+                <div class="reveal d4">
+                    <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mb-3">Yetkinlikler & Teknolojiler</p>
+                    <div class="flex flex-wrap gap-2" role="list" aria-label="Skills">
+                        <span role="listitem" class="px-4 py-2 bg-zinc-800/50 border border-zinc-700/50 rounded-lg text-sm text-zinc-300 hover:border-accent hover:text-white transition-colors cursor-default">C#</span>
+                        <span role="listitem" class="px-4 py-2 bg-zinc-800/50 border border-zinc-700/50 rounded-lg text-sm text-zinc-300 hover:border-accent hover:text-white transition-colors cursor-default">.NET Core</span>
+                        <span role="listitem" class="px-4 py-2 bg-zinc-800/50 border border-zinc-700/50 rounded-lg text-sm text-zinc-300 hover:border-accent hover:text-white transition-colors cursor-default">Entity Framework</span>
+                        <span role="listitem" class="px-4 py-2 bg-zinc-800/50 border border-zinc-700/50 rounded-lg text-sm text-zinc-300 hover:border-accent hover:text-white transition-colors cursor-default">MSSQL</span>
+                        <span role="listitem" class="px-4 py-2 bg-zinc-800/50 border border-zinc-700/50 rounded-lg text-sm text-zinc-300 hover:border-accent hover:text-white transition-colors cursor-default">OOP & N-Tier</span>
+                        <span role="listitem" class="px-4 py-2 bg-zinc-800/50 border border-zinc-700/50 rounded-lg text-sm text-zinc-300 hover:border-accent hover:text-white transition-colors cursor-default">Süreç Otomasyonu</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact" class="py-24">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="bg-zinc-900 dark:bg-zinc-800 rounded-3xl p-10 md:p-16 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-accent/20 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+            <div class="absolute bottom-0 left-0 w-40 h-40 bg-accent/10 rounded-full blur-2xl pointer-events-none" aria-hidden="true"></div>
+
+            <div class="relative z-10 grid md:grid-cols-2 gap-12 items-start">
+
+                <div>
+                    <p class="reveal text-xs font-medium text-accent tracking-widest uppercase mb-3">İletişime Geçin</p>
+                    <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-white leading-tight mb-5">Birlikte<br>  Çalışalım</h2>
+                    <p class="reveal d2 text-zinc-400 leading-relaxed mb-8">Güçlü backend sistemleri, veritabanı mimarileri veya süreç otomasyonları gerektiren projeleriniz için iletişime geçebilirsiniz. Yeni fikirleri hayata geçirmek için buradayım.</p>
+
+                    <div class="reveal d3 flex flex-col gap-4">
+                        <a href="hello@yagiztkn.com" class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
+                            <span class="w-9 h-9 flex items-center justify-center bg-zinc-800 rounded-lg group-hover:bg-accent/20 transition-colors shrink-0">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                            </span>
+                            <span class="text-sm">hello@yagiztkn.com</span>
+                        </a>
+                        <a href="https://www.linkedin.com/in/yagiztekin-software/" rel="noopener noreferrer" target="_blank" class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
+                            <span class="w-9 h-9 flex items-center justify-center bg-zinc-800 rounded-lg group-hover:bg-accent/20 transition-colors shrink-0">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg>
+                            </span>
+                            <span class="text-sm">linkedin.com/in/yagiztekin-software/</span>
+                        </a>
+                        <a href="https://github.com/282yago" rel="noopener noreferrer" target="_blank" class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
+                            <span class="w-9 h-9 flex items-center justify-center bg-zinc-800 rounded-lg group-hover:bg-accent/20 transition-colors shrink-0">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" /></svg>
+                            </span>
+                            <span class="text-sm">github.com/282yago</span>
+                        </a>
+                        <a href="https://www.instagram.com/yagiztkn_/?hl=tr" rel="noopener noreferrer" target="_blank" class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
+                            <span class="w-9 h-9 flex items-center justify-center bg-zinc-800 rounded-lg group-hover:bg-accent/20 transition-colors shrink-0">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" /></svg>
+                            </span>
+                            <span class="text-sm">instagram.com/yagiztkn_</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="reveal d2">
+                    <form asp-action="SendMessage" method="post" class="space-y-6">
+                        <div class="flex flex-col gap-4">
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="fname" class="block text-xs font-medium text-zinc-400 mb-1.5">Ad-Soyad <span aria-hidden="true">*</span></label>
+                                    <input type="text" id="fname" name="FullName" placeholder="Yağız Tekin" required autocomplete="name"
+                                           class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3 placeholder-zinc-600 focus:outline-none focus:border-accent transition-colors">
+                                </div>
+                                <div>
+                                    <label for="femail" class="block text-xs font-medium text-zinc-400 mb-1.5">E-posta <span aria-hidden="true">*</span></label>
+                                    <input type="email" id="femail" name="Email" placeholder="yagiz@sirket.com" required autocomplete="email"
+                                           class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3 placeholder-zinc-600 focus:outline-none focus:border-accent transition-colors">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="fsubject" class="block text-xs font-medium text-zinc-400 mb-1.5">Konu <span aria-hidden="true">*</span></label>
+                                <input type="text" id="fsubject" name="Subject" placeholder="Proje sorgusu"
+                                       class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3 placeholder-zinc-600 focus:outline-none focus:border-accent transition-colors">
+                            </div>
+                            <div>
+                                <label for="fmessage" class="block text-xs font-medium text-zinc-400 mb-1.5">Mesajınız <span aria-hidden="true">*</span></label>
+                                <textarea id="fmessage" name="Message" rows="4" placeholder="Projeniz hakkında bilgi verin..." required
+                                          class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3 placeholder-zinc-600 focus:outline-none focus:border-accent transition-colors resize-none"></textarea>
+                            </div>
+                            <button type="submit" class="shimmer w-full bg-accent text-white font-display font-bold text-sm py-3.5 rounded-xl hover:bg-accent-light transition-colors">
+                                Mesaj gönder →
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+
