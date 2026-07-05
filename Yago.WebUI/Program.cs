@@ -92,7 +92,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler();  
+    app.UseExceptionHandler("/error");
     app.UseHsts();               
 }
 app.UseHttpsRedirection();
@@ -115,6 +115,7 @@ app.UseCors("ReactApp");
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapGet("/error", () => Results.Problem("Beklenmeyen bir hata oluştu."));
 app.MapControllers();
 
 app.Run();
