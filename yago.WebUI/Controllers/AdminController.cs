@@ -1,295 +1,282 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System.Runtime.InteropServices;
-using Yago.DataAcsess.Context;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-
+using System.Threading.Tasks;
+using Yago.Core.Entities;
+using Yago.DataAcsess.Context;
 
 namespace Yago.WebUI.Controllers
 {
-    [Authorize]
-    public class AdminController : Controller
+    // Brute force takibi için static dictionary
+    public static class LoginAttemptTracker
     {
+        private static readonly Dictionary<string, (int Count, DateTime LockUntil)> _attempts = new();
+        private static readonly object _lock = new();
 
+        public static bool IsLocked(string ip)
+        {
+            lock (_lock)
+            {
+                if (_attempts.TryGetValue(ip, out var entry))
+                {
+                    if (entry.LockUntil > DateTime.UtcNow && entry.Count >= 5)
+                        return true;
+                    if (entry.LockUntil <= DateTime.UtcNow)
+                        _attempts.Remove(ip);
+                }
+                return false;
+            }
+        }
+
+        public static void RecordFailure(string ip)
+        {
+            lock (_lock)
+            {
+                if (_attempts.TryGetValue(ip, out var entry))
+                {
+                    var newCount = entry.Count + 1;
+                    var lockUntil = newCount >= 5
+                        ? DateTime.UtcNow.AddMinutes(15)
+                        : entry.LockUntil;
+                    _attempts[ip] = (newCount, lockUntil);
+                }
+                else
+                {
+                    _attempts[ip] = (1, DateTime.UtcNow.AddMinutes(1));
+                }
+            }
+        }
+
+        public static void RecordSuccess(string ip)
+        {
+            lock (_lock) { _attempts.Remove(ip); }
+        }
+    }
+
+    [ApiController]
+    [Route("api/[controller]")]   
+    [Authorize]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+    public class AdminController : ControllerBase  
+    {
         private readonly AppDbContext _context;
+        private readonly IOptions<EmailSettings> _emailSettings;
 
-        public AdminController(AppDbContext context)
+        public AdminController(AppDbContext context, IOptions<EmailSettings> emailSettings)
         {
             _context = context;
-        }
-        public IActionResult Index()
-        {
-            var projects = _context.Projects.ToList();
-            return View(projects);
+            _emailSettings = emailSettings;
         }
 
-        [HttpGet]
+
+        [HttpPost("login")]
         [AllowAnonymous]
-
-        public IActionResult Login()
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            return View();
-        }
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login(string username, string password)
-        {
-            // 1. Önce kullanıcının yazdığı kullanıcı adını (admin) VERİTABANINDA arıyoruz
-            var admin = _context.Admins.FirstOrDefault(a => a.Username == username);
+            var ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
 
-            // Eğer sistemde böyle bir kullanıcı varsa işlemlere devam et
-            if (admin != null)
+            if (LoginAttemptTracker.IsLocked(ip))
             {
-                // 2. Formdan girilen şifreyi kıyma makinemize (hashPassword) atıyoruz
-                string hashedPassword = hashPassword(password);
-
-                // 3. ASIL KONTROL: Kıyma makinesinden çıkan sonuç, VERİTABANINDAKİ sonuçla aynı mı?
-                if (admin.PasswordHash == hashedPassword)
+                return StatusCode(429, new
                 {
-                    // Şifreler eşleşti! Bileti kesip içeri alıyoruz.
-                    var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, username)
-            };
-
-                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-                    return RedirectToAction("Index", "Admin");
-                }
+                    message = "Çok fazla başarısız deneme. Lütfen 15 dakika sonra tekrar dene."
+                });
             }
 
-            // Eğer kullanıcı adı yoksa veya şifre eşleşmezse hata ver
-            ViewBag.ErrorMessage = "Kullanıcı adı veya şifre hatalı!";
-            return View();
+            var admin = _context.Admins.FirstOrDefault(a => a.Username == request.Username);
+
+            if (admin != null && admin.PasswordHash == HashPassword(request.Password))
+            {
+                LoginAttemptTracker.RecordSuccess(ip);
+
+                var claims = new List<Claim> { new Claim(ClaimTypes.Name, request.Username) };
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+                return Ok(new { username = request.Username });
+            }
+
+            LoginAttemptTracker.RecordFailure(ip);
+            return Unauthorized(new { message = "Kullanıcı adı veya şifre hatalı!" });
         }
 
-        [HttpGet]
-        public IActionResult Create()
+        [HttpGet("me")]   // GET /api/Admin/me
+        public IActionResult Me()
         {
-            return View();
+            var username = User.Identity?.Name;
+            if (username == null) return Unauthorized();
+            return Ok(new { username });
         }
 
-        [HttpPost]
-        public IActionResult Create(Yago.Core.Entities.Project project)
-        {
-            try
-            {
-                project.CreatedDate = System.DateTime.Now;
-
-                if (project.FullDescription == null) project.FullDescription = "";
-                if (project.LiveLink == null) project.LiveLink = "";
-                if (project.GitHubLink == null) project.GitHubLink = "";
-
-                _context.Projects.Add(project);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            catch (System.Exception ex)
-            {
-                var gercekHata = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                return Content("Hata: " + gercekHata);
-            }
-        }
-
-        public IActionResult Delete(int id)
-        {
-            var project = _context.Projects.Find(id);
-
-            if (project != null)
-            {
-                _context.Projects.Remove(project);
-                _context.SaveChanges();
-            }
-            return RedirectToAction("Index");
-        }
-
-        [HttpGet]
-        public IActionResult Update(int id)
-        {
-            var project = _context.Projects.Find(id);
-            if (project == null)
-            {
-                return RedirectToAction("Index");
-            }
-            return View(project);
-        }
-
-        [HttpPost]
-        public IActionResult Update(Yago.Core.Entities.Project updatedProject)
-        {
-            try
-            {
-                var existingProject = _context.Projects.Find(updatedProject.ID);
-                if (existingProject != null)
-                {
-                    existingProject.Title = updatedProject.Title;
-                    existingProject.ShortDescription = updatedProject.ShortDescription;
-                    existingProject.Technologies = updatedProject.Technologies;
-
-                    existingProject.FullDescription = updatedProject.FullDescription ?? "";
-                    existingProject.GitHubLink = updatedProject.GitHubLink ?? "";
-                    existingProject.LiveLink = updatedProject.LiveLink ?? "";
-
-                    _context.SaveChanges();
-                }
-                return RedirectToAction("Index");
-
-            }
-            catch (System.Exception ex)
-            {
-                var gercekHata = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                return Content("Hata: " + gercekHata);
-            }
-        }
-
+        [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Admin");
+            return Ok();
         }
 
-        private string hashPassword(string password)
+        [HttpGet("messages")]
+        public IActionResult GetMessages([FromQuery] string searchTerm = "")
         {
-            using (var sha256 = SHA256.Create())
+            var allMessages = _context.ContactMessages.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchTerm))
             {
-                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
+                allMessages = allMessages.Where(m =>
+                    m.FullName.Contains(searchTerm) ||
+                    m.Email.Contains(searchTerm) ||
+                    m.Subject.Contains(searchTerm) ||
+                    m.Message.Contains(searchTerm));
+            }
+
+            var messages = allMessages.OrderByDescending(m => m.SendDate).ToList();
+
+            // DEĞİŞTİ: ViewBag yerine tek bir JSON nesnesi içinde dönüyoruz
+            return Ok(new
+            {
+                stats = new
                 {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-                return builder.ToString();
+                    totalMessages = _context.ContactMessages.Count(),
+                    unreadMessages = _context.ContactMessages.Count(m => !m.IsRead),
+                    todayMessages = _context.ContactMessages.Count(m => m.SendDate.Date == DateTime.Now.Date),
+                    totalProjects = _context.Projects.Count()
+                },
+                messages
+            });
+        }
+
+        [HttpPost("messages/{id}/reply")]
+        public IActionResult ReplyMessage(int id, [FromBody] ReplyMessageRequest request)
+        {
+            var message = _context.ContactMessages.Find(id);
+            if (message == null || string.IsNullOrEmpty(request.ReplyContent))
+                return NotFound();
+
+            try
+            {
+                var settings = _emailSettings.Value;
+                var smtpClient = new SmtpClient(settings.SmtpServer)
+                {
+                    Port = settings.SmtpPort,
+                    Credentials = new NetworkCredential(settings.SenderEmail, settings.AppPassword),
+                    EnableSsl = true,
+                };
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress(settings.SenderEmail, "Yağız Tekin"),
+                    Subject = "RE: " + message.Subject,
+                    Body = $"Merhaba {message.FullName},\n\n{request.ReplyContent}\n\n---\nSaygılarımla,\nYağız Tekin",
+                    IsBodyHtml = false,
+                };
+                mailMessage.To.Add(message.Email);
+                smtpClient.Send(mailMessage);
+
+                message.IsRead = true;
+                _context.SaveChanges();
+
+                return Ok(new { message = "E-posta başarıyla gönderildi" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "E-posta gönderilemedi: " + ex.Message });
             }
         }
 
-        private bool IsPasswordSecure(string Password, out string errorMessage)
+        [HttpPost("messages/{id}/read")]
+        public IActionResult MarkAsRead(int id)
+        {
+            var message = _context.ContactMessages.Find(id);
+            if (message == null) return NotFound();
+
+            message.IsRead = true;
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpDelete("messages/{id}")]
+        public IActionResult DeleteMessage(int id)
+        {
+            var message = _context.ContactMessages.Find(id);
+            if (message == null) return NotFound();
+
+            _context.ContactMessages.Remove(message);
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPost("change-password")]
+        public IActionResult ChangePassword([FromBody] ChangePasswordRequest request)
+        {
+            var admin = _context.Admins.FirstOrDefault();
+            if (admin == null)
+                return NotFound(new { message = "Sistemde kayıtlı yönetici bulunamadı!" });
+
+            if (admin.PasswordHash != HashPassword(request.CurrentPassword))
+                return BadRequest(new { message = "Mevcut şifrenizi yanlış girdiniz!" });
+
+            if (!IsPasswordSecure(request.NewPassword, out string errorMessage))
+                return BadRequest(new { message = errorMessage });
+
+            admin.PasswordHash = HashPassword(request.NewPassword);
+            _context.SaveChanges();
+
+            return Ok(new { message = "Şifre güncellendi, lütfen yeniden giriş yapın." });
+        }
+
+        // ===== HELPER METODLAR (değişmedi) =====
+
+        private string HashPassword(string password)
+        {
+            using var sha256 = SHA256.Create();
+            byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+            var builder = new StringBuilder();
+            foreach (var b in bytes) builder.Append(b.ToString("x2"));
+            return builder.ToString();
+        }
+
+        private bool IsPasswordSecure(string password, out string errorMessage)
         {
             errorMessage = "";
-            if(Password.Length < 6)
-            {
-                errorMessage = "Şifre en az 6 karakter olmalıdır.";
-                return false;
-            }
+            if (password.Length < 6) { errorMessage = "Şifre en az 6 karakter olmalıdır."; return false; }
 
-            bool hasUpper = false, hasLower = false, hasDigit = false, hasSpecial = false;
+            bool hasUpper = password.Any(char.IsUpper);
+            bool hasLower = password.Any(char.IsLower);
+            bool hasDigit = password.Any(char.IsDigit);
+            bool hasSpecial = password.Any(c => !char.IsLetterOrDigit(c));
 
-            foreach (char c in Password)
-            {
-                if (char.IsUpper(c)) hasUpper = true;
-                else if (char.IsLower(c)) hasLower = true;
-                else if (char.IsDigit(c)) hasDigit = true;
-                if (!char.IsLetterOrDigit(c)) hasSpecial = true;
-
-            }
-
-            if(!hasUpper) { errorMessage = "Şifre en az bir Büyük    harf içermelidir."; return false; }
-            if(!hasLower) { errorMessage = "Şifre en az bir küçük harf içermelidir."; return false; }
-            if(!hasDigit) { errorMessage = "Şifre en az bir rakam içermelidir."; return false; }
-            if(!hasSpecial) { errorMessage = "Şifre en az bir özel karakter içermelidir."; return false; }
+            if (!hasUpper) { errorMessage = "Şifre en az bir büyük harf içermelidir."; return false; }
+            if (!hasLower) { errorMessage = "Şifre en az bir küçük harf içermelidir."; return false; }
+            if (!hasDigit) { errorMessage = "Şifre en az bir rakam içermelidir."; return false; }
+            if (!hasSpecial) { errorMessage = "Şifre en az bir özel karakter içermelidir."; return false; }
 
             return true;
         }
+    }
 
-        [HttpPost]
-        public IActionResult ChangePassword(string currentPassword, string newPassword)
-        {
-            try
-            {
-                var admin = _context.Admins.FirstOrDefault();
-                if (admin == null)
-                {
-                    ViewBag.Error = "Sistemde kayıtlı yönetici bulunamadı!";
-                    return View();
-                }
+    // YENİ: JSON body'den veri almak için küçük request modelleri
+    public class LoginRequest
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
 
-                // Kıyma makinesini kullanarak eski şifreyi doğruluyoruz
-                if (admin.PasswordHash != hashPassword(currentPassword))
-                {
-                    ViewBag.Error = "Mevcut şifrenizi yanlış girdiniz!";
-                    return View();
-                }
+    public class ReplyMessageRequest
+    {
+        public string ReplyContent { get; set; }
+    }
 
-                // Güvenlik görevlisini kullanarak yeni şifreyi denetliyoruz
-                if (!IsPasswordSecure(newPassword, out string errorMessage))
-                {
-                    ViewBag.Error = errorMessage;
-                    return View();
-                }
-
-                // Her şey tamamsa yeni şifreyi kıyma makinesinden geçirip SQL'e kaydediyoruz
-                admin.PasswordHash = hashPassword(newPassword);
-                _context.SaveChanges();
-
-                // Şifre değişti, güvenlik için oturumu kapatıyoruz
-                return RedirectToAction("Logout");
-            }
-            catch (System.Exception ex)
-            {
-                ViewBag.Error = "Bir hata oluştu: " + (ex.InnerException?.Message ?? ex.Message);
-                return View();
-            }
-        }
-
-        [HttpGet]
-        public IActionResult ChangePassword()
-        {
-            return View();
-        }
-
-        // POST: Formdan gelen eski ve yeni şifreyi işler
-        [HttpPost]
-        public IActionResult ChancePasword(string currentPassword, string newPassword)
-        {
-            try
-            {
-                // 1. Veritabanındaki yöneticiyi bul (Sistemde tek admin olduğunu varsayıyoruz)
-                var admin = _context.Admins.FirstOrDefault();
-                if (admin == null)
-                {
-                    ViewBag.Error = "Sistemde kayıtlı yönetici bulunamadı!";
-                    return View();
-                }
-
-                // 2. MEVCUT ŞİFRE KONTROLÜ
-                // Kullanıcının girdiği eski şifreyi Hash'leyip, veritabanındaki Hash ile karşılaştırıyoruz
-                if (admin.PasswordHash != hashPassword(currentPassword))
-                {
-                    ViewBag.Error = "Mevcut şifrenizi yanlış girdiniz!";
-                    return View();
-                }
-
-                // 3. KALİTE KONTROL (Güvenlik Görevlisi)
-                // Yeni şifre kurallara uyuyor mu? (Eğer uymazsa out parametresi ile hatayı alıyoruz)
-                if (!IsPasswordSecure(newPassword, out string errorMessage))
-                {
-                    ViewBag.Error = errorMessage; // Şifrede sayı yok, büyük harf yok vs. hatası
-                    return View();
-                }
-
-                // 4. KIYMA MAKİNESİ (Hashing)
-                // Her şey tamamsa yeni şifreyi kriptolayıp veritabanına yazıyoruz
-                admin.PasswordHash = hashPassword(newPassword);
-                _context.SaveChanges();
-
-                // 5. Şifre değiştiği için güvenlik gereği mevcut oturumu kapatıp yeniden giriş yapmasını istiyoruz
-                return RedirectToAction("Logout");
-            }
-            catch (System.Exception ex)
-            {
-                ViewBag.Error = "Bir hata oluştu: " + (ex.InnerException?.Message ?? ex.Message);
-                return View();
-            }
-        }
-
-
-
-
+    public class ChangePasswordRequest
+    {
+        public string CurrentPassword { get; set; }
+        public string NewPassword { get; set; }
     }
 }

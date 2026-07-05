@@ -14,7 +14,10 @@ namespace Yago.DataAcsess.Context
         public DbSet<Project> Projects { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<ContactMessage> ContactMessages { get; set; }
-
+        public DbSet<Skill> Skills { get; set; }
+        public DbSet<TimelineEntry> TimelineEntries { get; set; }
+        public DbSet<SiteSettings> SiteSettings { get; set; }
+        public DbSet<PageVisit> PageVisits { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

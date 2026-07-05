@@ -1,18 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Yago.Core.Entities
+public class Project
 {
-    public class Project
-    {
-        public int ID { get; set; }
-        public string Title { get; set; }
-        public string ShortDescription { get; set; }
-        public string FullDescription { get; set; }
-        public string GitHubLink { get; set; }
-        public string LiveLink { get; set; }
-        public string Technologies { get; set; }
-        public DateTime CreatedDate { get; set; } 
-    }
+    public int ID { get; set; }
+
+    [Required, MaxLength(200)]
+    public string Title { get; set; } = string.Empty;
+
+    [Required, MaxLength(500)]
+    public string ShortDescription { get; set; } = string.Empty;
+
+    [MaxLength(5000)]
+    public string? FullDescription { get; set; }
+
+    [Required, MaxLength(500)]
+    public string Technologies { get; set; } = string.Empty;
+
+    [MaxLength(500)]
+    public string? GitHubLink { get; set; }
+
+    [MaxLength(500)]
+    public string? LiveLink { get; set; }
+
+    public DateTime CreatedDate { get; set; }
+    public bool IsFeatured { get; set; }
+    public int DisplayOrder { get; set; }
 }
